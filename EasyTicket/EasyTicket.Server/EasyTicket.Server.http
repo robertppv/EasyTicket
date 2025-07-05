@@ -1,0 +1,6 @@
+@EasyTicket.Server_HostAddress = http://localhost:5276
+
+GET {{EasyTicket.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

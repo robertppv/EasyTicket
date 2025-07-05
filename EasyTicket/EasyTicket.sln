@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "easyticket.client", "easyticket.client\easyticket.client.esproj", "{E0B62EFD-1792-0E8E-9D98-8C781BCABA72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyTicket.Server", "EasyTicket.Server\EasyTicket.Server.csproj", "{965B159D-1605-4463-B5F3-76EA20A67A4E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0B62EFD-1792-0E8E-9D98-8C781BCABA72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0B62EFD-1792-0E8E-9D98-8C781BCABA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0B62EFD-1792-0E8E-9D98-8C781BCABA72}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E0B62EFD-1792-0E8E-9D98-8C781BCABA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0B62EFD-1792-0E8E-9D98-8C781BCABA72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0B62EFD-1792-0E8E-9D98-8C781BCABA72}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{965B159D-1605-4463-B5F3-76EA20A67A4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{965B159D-1605-4463-B5F3-76EA20A67A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{965B159D-1605-4463-B5F3-76EA20A67A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{965B159D-1605-4463-B5F3-76EA20A67A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B30DCB40-C68D-4944-867A-B5E396AB8E3C}
+	EndGlobalSection
+EndGlobal
