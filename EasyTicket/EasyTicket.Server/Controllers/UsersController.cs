@@ -21,7 +21,7 @@ namespace EasyTicket.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users.Include(u=> u.Tickets).ToListAsync();
 
             return Ok(users);
         }
@@ -37,7 +37,7 @@ namespace EasyTicket.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> AddUser(UserDTO user)
+        public async Task<ActionResult> AddUser(UserDTO user)
         {
             var urt = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
             if (urt != null)
@@ -53,14 +53,14 @@ namespace EasyTicket.Server.Controllers
             };
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
-            return Ok(newUser);
+            return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
 
-        public async Task<ActionResult<User>> PutUser(User user)
+        public async Task<ActionResult<User>> PutUser(string id,UserDTO user)
         {
-            var u = await _context.Users.FirstOrDefaultAsync(s => s.Id == user.Id);
+            var u = await _context.Users.FirstOrDefaultAsync(s => s.Id ==id);
             if (u == null)
                 return NotFound();
             u.Email = user.Email;
@@ -68,12 +68,12 @@ namespace EasyTicket.Server.Controllers
             u.Role = user.Role;
 
             await _context.SaveChangesAsync();
-            return Ok(u);
+            return Ok();
 
         }
 
 
-        [HttpPatch]
+        [HttpPatch("{Id}")]
         public async Task<ActionResult> UpdatePassword(string Id, string pass, string newPass)
         {
             var user = await _context.Users.FirstOrDefaultAsync(s => s.Id == Id);

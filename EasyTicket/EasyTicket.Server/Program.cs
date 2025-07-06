@@ -2,6 +2,7 @@
 using EasyTicket.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json.Serialization;
 
 namespace EasyTicket.Server
 {
@@ -17,10 +18,12 @@ namespace EasyTicket.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             var app = builder.Build();
 
             app.UseDefaultFiles();

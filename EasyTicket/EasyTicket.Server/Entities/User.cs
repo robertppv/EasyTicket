@@ -13,5 +13,7 @@
         required
         public string Role {  get; set; } = string.Empty;
 
+        public ICollection<Ticket> Tickets { get; set; }=new List<Ticket>();
+
     }
 }
