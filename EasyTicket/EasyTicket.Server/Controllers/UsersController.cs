@@ -21,7 +21,7 @@ namespace EasyTicket.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetUsers()
         {
-            var users = await _context.Users.Include(u=> u.Tickets).ToListAsync();
+            var users = await _context.Users.Include(u => u.Tickets).ToListAsync();
 
             return Ok(users);
         }
@@ -58,9 +58,9 @@ namespace EasyTicket.Server.Controllers
 
         [HttpPut("{id}")]
 
-        public async Task<ActionResult<User>> PutUser(string id,UserDTO user)
+        public async Task<ActionResult<User>> PutUser(string id, UserDTO user)
         {
-            var u = await _context.Users.FirstOrDefaultAsync(s => s.Id ==id);
+            var u = await _context.Users.FirstOrDefaultAsync(s => s.Id == id);
             if (u == null)
                 return NotFound();
             u.Email = user.Email;
