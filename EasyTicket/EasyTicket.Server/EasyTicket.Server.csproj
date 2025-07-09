@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <SpaRoot>..\easyticket.client</SpaRoot>
-    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
+    <SpaProxyLaunchCommand></SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:61593</SpaProxyServerUrl>
   </PropertyGroup>
 
