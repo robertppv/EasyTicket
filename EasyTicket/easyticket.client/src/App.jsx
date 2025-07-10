@@ -1,4 +1,4 @@
-import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
   Navigate,
@@ -13,58 +13,75 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 const App = () => {
-  const [user, setUser] = useState({
-    id: '',
-    name: '',
-    role: '',
-  });
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetch = () => {
+    const fetch = async () => {
       const token = localStorage.getItem('token');
-
-      console.log(token);
       if (token) {
-        const data = jwtDecode(token);
-        const roleClaimName =
-          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
-        const nameClaimName =
-          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name';
-        const idClaimName =
-          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
-        setUser({
-          id: 'pula',
-          name: data[nameClaimName],
-          role: data[roleClaimName],
-        });
-        console.log(
-          data[idClaimName],
-          data[roleClaimName],
-          data[nameClaimName]
-        );
-        console.log(user);
-        console.log(user);
+        try {
+          const res = await axios.get('/api/Auth/get/user', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(res.data);
+        } catch (err) {
+          console.log(err);
+          localStorage.clear('token');
+        }
       }
+      setIsLoading(false);
     };
     fetch();
   }, []);
+
+  if (isLoading) {
+    return <div>Loading....</div>;
+  }
   return (
     <Router>
-      <Navbar />
+      <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route
           path='/login'
-          element={user.id ? <Navigate to='/dashboard' /> : <Login />}
+          element={
+            user ? <Navigate to='/dashboard' /> : <Login setUser={setUser} />
+          }
         />
         <Route
           path='/register'
-          element={user.id == '' ? <Navigate to='/dashboard' /> : <Register />}
+          element={user ? <Navigate to='/dashboard' /> : <Register />}
         />
-        <Route path='/admin' element={<Admin />} />
+        <Route
+          path='/admin'
+          element={
+            user ? (
+              user.role === 'Admin' ? (
+                <Admin />
+              ) : (
+                <Navigate to='/dashboard' />
+              )
+            ) : (
+              <Navigate to='/' />
+            )
+          }
+        />
         <Route
           path='/dashboard'
-          element={user.id == '' ? <Dashboard /> : <Navigate to='/' />}
+          element={
+            user ? (
+              user.role === 'User' ? (
+                <Dashboard user={user} />
+              ) : (
+                <Navigate to='/admin' />
+              )
+            ) : (
+              <Navigate to='/' />
+            )
+          }
         />
       </Routes>
     </Router>

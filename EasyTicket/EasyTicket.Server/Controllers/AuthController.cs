@@ -1,6 +1,7 @@
 ﻿using EasyTicket.Server.Entities;
 using EasyTicket.Server.Models;
 using EasyTicket.Server.Services.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
@@ -15,11 +16,11 @@ namespace EasyTicket.Server.Controllers
 
         public async Task<ActionResult<string>> Login(UserLoginDTO request)
             {
-            var token = await authService.LoginAsync(request);
+            var res = await authService.LoginAsync(request);
 
-            if (token is null)
+            if (res is null)
                 return BadRequest();
-            return Ok(token);
+            return Ok(res);
             }
 
 
@@ -32,7 +33,18 @@ namespace EasyTicket.Server.Controllers
                 return BadRequest();
             return Ok(user);
             }
-            
 
+
+        [HttpGet("get/user")]
+        [Authorize]
+        public async Task<ActionResult> GetCurrentUser()
+            {
+            var user=authService.GetCurrentUser();
+            if (user == null)
+                return BadRequest();
+            return Ok(user);
+            }
+        
         }
+
     }

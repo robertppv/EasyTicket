@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-const Login = () => {
+const Login = ({ setUser }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -13,18 +13,23 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
     try {
       const res = await axios.post('/api/Auth/login', formData);
-      console.log(res.data);
-      localStorage.setItem('token', res.data);
+
+      localStorage.setItem('token', res.data.token);
+      setUser({
+        id: res.data.id,
+        name: res.data.name,
+        role: res.data.role,
+      });
       navigate('/dashboard');
     } catch (err) {
       console.log(err);
     }
   };
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-100'>
+    <div className='min-h-screen flex items-center justify-center '>
       <div className='bg-white p-8 rounded-lg shadow-lg w-full max-w-md border border-gray-200'>
         <h2 className='text-2xl font-bold mb-6 text-center text-gray-800'>
           Login
@@ -35,7 +40,7 @@ const Login = () => {
               Email
             </label>
             <input
-              className='w-full p-3 border border-grey rounded-md focus:ring-blue-200 outline-none focus:border-blue-400'
+              className='w-full p-3 border border-grey rounded-md focus:ring-blue-200 outline-none focus:border-[#0A400C]'
               type='email'
               name='email'
               value={formData.email}
@@ -49,7 +54,7 @@ const Login = () => {
               Password
             </label>
             <input
-              className='w-full p-3 border border-grey rounded-md focus:ring-blue-200 outline-none focus:border-blue-400'
+              className='w-full p-3 border border-grey rounded-md focus:ring-blue-200 outline-none focus:border-[#0A400C]'
               type='password'
               name='password'
               value={formData.password}
@@ -59,8 +64,8 @@ const Login = () => {
             />
           </div>
           <button
-            className='w-full bg-blue-500 text-white
-          p-3 rounded-md hover:bg-blue-600 font-medium cursor-pointer'
+            className='w-full bg-[#0A400C] text-white
+          p-3 rounded-md hover:bg-[#3f5b40] font-medium cursor-pointer'
           >
             Login
           </button>

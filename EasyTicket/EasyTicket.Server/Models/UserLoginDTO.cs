@@ -2,6 +2,4 @@
 {
     public record class UserLoginDTO(string Email, string Password);
 
-
-
 }

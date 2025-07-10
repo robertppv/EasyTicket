@@ -5,22 +5,28 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace EasyTicket.Server.Services.Auth
     {
-    public class AuthService(AppDbContext context, IConfiguration configuration) : IAuthService
+    public class AuthService(AppDbContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : IAuthService
         {
-        public async Task<string?> LoginAsync(UserLoginDTO request)
+        public async Task<UserLoginResponseDTO?> LoginAsync(UserLoginDTO request)
             {
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
             if (user == null)
                 return null;
             if (new PasswordHasher<User>().VerifyHashedPassword(user, user.HashedPassword, request.Password) == PasswordVerificationResult.Failed)
                 return null;
-            return CreateToken(user);
+            var response = new UserLoginResponseDTO(
+                Id: user.Id, Name: user.Name, Role : user.Role, Token: CreateToken(user)
+                );
+
+
+            return response;
             }
 
         public async Task<User?> RegisterAsync(UserDTO request)
@@ -66,5 +72,29 @@ namespace EasyTicket.Server.Services.Auth
                 );
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
             }
-        }
-    }
+
+        public  CurrentUserDTO? GetCurrentUser()
+            {
+            if (httpContextAccessor.HttpContext is null)
+                return null;
+            var userId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userName = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var role = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+
+            if (userId == null || userName == null || role == null)
+                return null;
+
+            CurrentUserDTO user = new CurrentUserDTO(
+                Id: userId,
+                name: userName,
+                Role: role
+                );
+                
+
+               
+            return user;
+            }
+    } 
+}
+
+    

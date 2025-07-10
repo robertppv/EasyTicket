@@ -6,6 +6,8 @@ namespace EasyTicket.Server.Services.Auth
     public interface IAuthService
     {
         Task<User?> RegisterAsync(UserDTO request);
-        Task<string?> LoginAsync(UserLoginDTO request);
+        Task<UserLoginResponseDTO?> LoginAsync(UserLoginDTO request);
+
+        CurrentUserDTO? GetCurrentUser();
     }
 }
